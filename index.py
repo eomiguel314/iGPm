@@ -1,3 +1,4 @@
+
 import streamlit as st
 from datetime import date
 
@@ -70,48 +71,54 @@ class Usuario:
         </style>
         """, unsafe_allow_html=True)
 
-        st.markdown(f'<img src="{self.foto or "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" class="perfil-img">', unsafe_allow_html=True)
+        # Criar duas colunas
+        col1, col2 = st.columns(2)
 
-        st.markdown(f'<div class="perfil-title">{self.nome}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="perfil-sub">{self.funcao} | {"🟢 Ativo" if self.ativo else "🔴 Inativo"}</div>', unsafe_allow_html=True)
+        # ---- COLUNA 1 ----
+        with col1:
+            st.markdown(f'<img src="{self.foto or "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" class="perfil-img">', unsafe_allow_html=True)
+            st.markdown(f'<div class="perfil-title">{self.nome}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="perfil-sub">{self.funcao} | {"🟢 Ativo" if self.ativo else "🔴 Inativo"}</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
-        st.markdown('<div class="section-title">Informações</div>', unsafe_allow_html=True)
-        st.markdown(f"- **Email:** {self.email}")
-        st.markdown(f"- **Entrada no laboratório:** {self.entrada.strftime('%d/%m/%Y')}")
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        if self.professor:
             st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
-            st.markdown('<div class="section-title">Professor</div>', unsafe_allow_html=True)
-            st.badge(self.professor, color="blue")
+            st.markdown('<div class="section-title">Informações</div>', unsafe_allow_html=True)
+            st.markdown(f"- **Email:** {self.email}")
+            st.markdown(f"- **Entrada no laboratório:** {self.entrada.strftime('%d/%m/%Y')}")
             st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
-        st.markdown('<div class="section-title">Bio</div>', unsafe_allow_html=True)
-        st.markdown(self.bio or "*Este membro ainda não escreveu uma bio.*")
-        st.markdown('</div>', unsafe_allow_html=True)
+            if self.professor:
+                st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
+                st.markdown('<div class="section-title">Professor</div>', unsafe_allow_html=True)
+                st.badge(self.professor, color="blue")
+                st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
-        st.markdown('<div class="section-title">Projetos</div>', unsafe_allow_html=True)
-        if self.projetos:
-            for projeto in self.projetos:
-                with st.expander(f"🔹 {projeto.nome}"):
-                    st.markdown(f"**Descrição:** {projeto.descricao}")
-                    st.markdown(f"**Data de Início:** {projeto.inicio.strftime('%d/%m/%Y')}")
-                    st.markdown(f"**Status:** {projeto.status}")
-        else:
-            st.markdown("*Nenhum projeto cadastrado.*")
-        st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Bio</div>', unsafe_allow_html=True)
+            st.markdown(self.bio or "*Este membro ainda não escreveu uma bio.*")
+            st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
-        st.markdown('<div class="section-title">Skills</div>', unsafe_allow_html=True)
-        if self.habilidades:
-            badges = " ".join([f'<span class="badge">{h}</span>' for h in self.habilidades])
-            st.markdown(badges, unsafe_allow_html=True)
-        else:
-            st.markdown("*Nenhuma habilidade informada.*")
-        st.markdown('</div>', unsafe_allow_html=True)
+        # ---- COLUNA 2 ----
+        with col2:
+            st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Projetos</div>', unsafe_allow_html=True)
+            if self.projetos:
+                for projeto in self.projetos:
+                    with st.expander(f"🔹 {projeto.nome}"):
+                        st.markdown(f"**Descrição:** {projeto.descricao}")
+                        st.markdown(f"**Data de Início:** {projeto.inicio.strftime('%d/%m/%Y')}")
+                        st.markdown(f"**Status:** {projeto.status}")
+            else:
+                st.markdown("*Nenhum projeto cadastrado.*")
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            st.markdown('<div class="perfil-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Skills</div>', unsafe_allow_html=True)
+            if self.habilidades:
+                badges = " ".join([f'<span class="badge">{h}</span>' for h in self.habilidades])
+                st.markdown(badges, unsafe_allow_html=True)
+            else:
+                st.markdown("*Nenhuma habilidade informada.*")
+            st.markdown('</div>', unsafe_allow_html=True)
 
 
 def dados_exemplo():
@@ -152,6 +159,6 @@ def dados_exemplo():
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="Perfil do Membro", layout="centered")
+    st.set_page_config(page_title="Perfil do Membro", layout="wide")  # melhor para 2 colunas
     st.title("🤖 - iGPm")
     dados_exemplo()
